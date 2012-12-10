@@ -1,0 +1,23 @@
+function document.onkeydown() { 
+	if (event.keyCode==116 || event.keyCode==189 || event.keyCode==187 ) { 
+		event.keyCode = 0;
+		event.cancelBubble = true; 
+		event.returnValue=false;
+		return false;
+	}
+};
+
+function forbid(){
+	var pattern = new RegExp("[-=]");
+	var v = this.value;
+	if(v.indexOf("-") > 0 || v.indexOf("=") > 0 ){
+		this.value = v.replace(pattern,'');
+	}
+	
+};
+
+var inputs = document.getElementsByTagName("input");
+for(var i=0; i< inputs.length; i++){
+	inputs[i].onpropertychange=forbid;
+}
+

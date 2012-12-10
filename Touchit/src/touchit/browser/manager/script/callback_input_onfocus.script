@@ -1,0 +1,7 @@
+function onFocusCallBackJS(){
+	var content = onFocusCallBack("java script"); 
+};
+var inputs = document.getElementsByTagName("input");
+for(var i=0; i< inputs.length; i++){
+	inputs[i].onfocus=onFocusCallBackJS;
+}
