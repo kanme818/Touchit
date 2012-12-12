@@ -14,10 +14,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
+import touchit.browser.manager.RuntimeManager;
 import touchit.browser.manager.SettingsManager;
 
 public class Toolbar extends JFrame {
 	private Keyboard keyboard = new Keyboard();
+
+	private JButton btnKeyboard;
+	private JButton btnTouchPad;
+	private Display display;
 
 	/**
 	 * 
@@ -63,11 +68,20 @@ public class Toolbar extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 
-		final Display display = Display.getCurrent();
+		display = Display.getCurrent();
 
-		final JButton btnKeyboard = new JButton("打开虚拟键盘");
+		btnKeyboard = new JButton("打开虚拟键盘");
 		btnKeyboard.setFont(new Font("微软雅黑", Font.BOLD, 18));
 		btnKeyboard.setBounds(new java.awt.Rectangle(0, 0, frameSize.width / 2, frameSize.height));
+
+		btnTouchPad = new JButton("打开手写板");
+		btnTouchPad.setFont(new Font("微软雅黑", Font.BOLD, 18));
+		btnTouchPad.setBounds(new java.awt.Rectangle(frameSize.width / 2, 0, frameSize.width / 2, frameSize.height));
+
+		contentPane.setLayout(null);
+		contentPane.add(btnKeyboard);
+		contentPane.add(btnTouchPad);
+
 		btnKeyboard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				display.asyncExec(new Runnable() {
@@ -75,57 +89,82 @@ public class Toolbar extends JFrame {
 					@Override
 					public void run() {
 						if (!keyboard.isVisible()) {
-							keyboard.setVisible(true);
-							btnKeyboard.setText("关闭虚拟键盘");
+							turnKeyboardOn();
+							turnTouchPadOff();
 						} else {
-							keyboard.setVisible(false);
-							btnKeyboard.setText("打开虚拟键盘");
+							turnKeyboardOff();
 						}
 					}
 				});
 
 			}
 		});
-		contentPane.setLayout(null);
-		contentPane.add(btnKeyboard);
-
-		JButton btnTouchPad = new JButton("打开手写板");
-		btnTouchPad.setFont(new Font("微软雅黑", Font.BOLD, 18));
 
 		btnTouchPad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Event keyEvent = new Event();
-				keyEvent.type = SWT.KeyDown;
-				keyEvent.keyCode = SWT.CTRL;
-				display.post(keyEvent);
+				display.asyncExec(new Runnable() {
 
-				keyEvent = new Event();
-				keyEvent.type = SWT.KeyDown;
-				keyEvent.keyCode = SWT.SHIFT;
-				display.post(keyEvent);
-
-				keyEvent = new Event();
-				keyEvent.type = SWT.KeyDown;
-				keyEvent.character = SettingsManager.getSettings().getHandPanelKey();
-				display.post(keyEvent);
-
-				keyEvent = new Event();
-				keyEvent.type = SWT.KeyUp;
-				keyEvent.character = SettingsManager.getSettings().getHandPanelKey();
-				display.post(keyEvent);
-
-				keyEvent = new Event();
-				keyEvent.type = SWT.KeyUp;
-				keyEvent.keyCode = SWT.SHIFT;
-				display.post(keyEvent);
-
-				keyEvent = new Event();
-				keyEvent.type = SWT.KeyUp;
-				keyEvent.keyCode = SWT.CTRL;
-				display.post(keyEvent);
+					@Override
+					public void run() {
+						if (!RuntimeManager.findProcess(RuntimeManager.PROCESS_HANDINPUT)) {
+							turnTouchPadOn();
+							turnKeyboardOff();
+						} else {
+							turnTouchPadOff();
+						}
+					}
+				});
 			}
 		});
-		btnTouchPad.setBounds(new java.awt.Rectangle(frameSize.width / 2, 0, frameSize.width / 2, frameSize.height));
-		contentPane.add(btnTouchPad);
+	}
+
+	private void turnKeyboardOn() {
+		keyboard.setVisible(true);
+		btnKeyboard.setText("关闭虚拟键盘");
+	}
+
+	private void turnKeyboardOff() {
+		keyboard.setVisible(false);
+		btnKeyboard.setText("打开虚拟键盘");
+	}
+
+	private void turnTouchPadOn() {
+		Event keyEvent = new Event();
+		keyEvent.type = SWT.KeyDown;
+		keyEvent.keyCode = SWT.CTRL;
+		display.post(keyEvent);
+
+		keyEvent = new Event();
+		keyEvent.type = SWT.KeyDown;
+		keyEvent.keyCode = SWT.SHIFT;
+		display.post(keyEvent);
+
+		keyEvent = new Event();
+		keyEvent.type = SWT.KeyDown;
+		keyEvent.character = SettingsManager.getSettings().getHandPanelKey();
+		display.post(keyEvent);
+
+		keyEvent = new Event();
+		keyEvent.type = SWT.KeyUp;
+		keyEvent.character = SettingsManager.getSettings().getHandPanelKey();
+		display.post(keyEvent);
+
+		keyEvent = new Event();
+		keyEvent.type = SWT.KeyUp;
+		keyEvent.keyCode = SWT.SHIFT;
+		display.post(keyEvent);
+
+		keyEvent = new Event();
+		keyEvent.type = SWT.KeyUp;
+		keyEvent.keyCode = SWT.CTRL;
+		display.post(keyEvent);
+
+		btnTouchPad.setText("关闭手写板");
+
+	}
+
+	private void turnTouchPadOff() {
+		RuntimeManager.killProcess(RuntimeManager.PROCESS_HANDINPUT);
+		btnTouchPad.setText("打开手写板");
 	}
 }

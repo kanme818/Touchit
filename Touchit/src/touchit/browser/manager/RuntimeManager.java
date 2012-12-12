@@ -3,6 +3,7 @@ package touchit.browser.manager;
 import java.awt.Window;
 import java.awt.geom.RoundRectangle2D;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
@@ -10,6 +11,8 @@ import org.apache.log4j.Logger;
 
 public class RuntimeManager {
 	private static Logger logger = Logger.getLogger(RuntimeManager.class);
+
+	public static final String PROCESS_HANDINPUT = "handinput.exe";
 
 	public static boolean findProcess(String processName) {
 		BufferedReader br = null;
@@ -38,6 +41,15 @@ public class RuntimeManager {
 				}
 			}
 
+		}
+	}
+
+	public static void killProcess(String processName) {
+		String command = "taskkill /F /IM " + processName;
+		try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
