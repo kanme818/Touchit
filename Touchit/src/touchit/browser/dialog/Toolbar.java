@@ -20,6 +20,11 @@ import touchit.browser.manager.SettingsManager;
 public class Toolbar extends JFrame {
 	private Keyboard keyboard = new Keyboard();
 
+	private static final String TXT_OPEN_KEYBOARD = "使用虚拟键盘";
+	private static final String TXT_CLOSE_KEYBOARD = "关闭虚拟键盘";
+	private static final String TXT_OPEN_TOUCHPAD = "使用手写板";
+	private static final String TXT_CLOSE_TOUCHPAD = "使用手写板";
+
 	private JButton btnKeyboard;
 	private JButton btnTouchPad;
 	private Display display;
@@ -70,11 +75,11 @@ public class Toolbar extends JFrame {
 
 		display = Display.getCurrent();
 
-		btnKeyboard = new JButton("打开虚拟键盘");
+		btnKeyboard = new JButton(TXT_OPEN_KEYBOARD);
 		btnKeyboard.setFont(new Font("微软雅黑", Font.BOLD, 18));
 		btnKeyboard.setBounds(new java.awt.Rectangle(0, 0, frameSize.width / 2, frameSize.height));
 
-		btnTouchPad = new JButton("打开手写板");
+		btnTouchPad = new JButton(TXT_OPEN_TOUCHPAD);
 		btnTouchPad.setFont(new Font("微软雅黑", Font.BOLD, 18));
 		btnTouchPad.setBounds(new java.awt.Rectangle(frameSize.width / 2, 0, frameSize.width / 2, frameSize.height));
 
@@ -120,12 +125,12 @@ public class Toolbar extends JFrame {
 
 	private void turnKeyboardOn() {
 		keyboard.setVisible(true);
-		btnKeyboard.setText("关闭虚拟键盘");
+		btnKeyboard.setText(TXT_CLOSE_KEYBOARD);
 	}
 
 	private void turnKeyboardOff() {
 		keyboard.setVisible(false);
-		btnKeyboard.setText("打开虚拟键盘");
+		btnKeyboard.setText(TXT_OPEN_KEYBOARD);
 	}
 
 	private void turnTouchPadOn() {
@@ -159,12 +164,12 @@ public class Toolbar extends JFrame {
 		keyEvent.keyCode = SWT.CTRL;
 		display.post(keyEvent);
 
-		btnTouchPad.setText("打开手写板");
+		btnTouchPad.setText(TXT_CLOSE_TOUCHPAD);
 
 	}
 
 	private void turnTouchPadOff() {
 		RuntimeManager.killProcess(RuntimeManager.PROCESS_HANDINPUT);
-		btnTouchPad.setText("打开手写板");
+		btnTouchPad.setText(TXT_OPEN_TOUCHPAD);
 	}
 }
