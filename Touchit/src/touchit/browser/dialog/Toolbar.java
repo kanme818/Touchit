@@ -159,7 +159,7 @@ public class Toolbar extends JFrame {
 		keyEvent.keyCode = SWT.CTRL;
 		display.post(keyEvent);
 
-		btnTouchPad.setText("关闭手写板");
+		btnTouchPad.setText("打开手写板");
 
 	}
 
