@@ -28,6 +28,8 @@ import org.eclipse.ui.part.ViewPart;
 import touchit.browser.action.ExitAction;
 import touchit.browser.action.SettingsAction;
 import touchit.browser.bean.Settings;
+import touchit.browser.callback.InputLosefocusFunction;
+import touchit.browser.callback.InputOnfocusFunction;
 import touchit.browser.dialog.Toolbar;
 import touchit.browser.manager.ScriptManager;
 import touchit.browser.manager.SettingsManager;
@@ -86,6 +88,9 @@ public class BrowserView extends ViewPart {
 		browser.setUrl(settings.getHomePage());
 
 		browser.setMenu(new Menu(browser));
+
+		new InputOnfocusFunction(browser, InputOnfocusFunction.FUNCTION_NAME);
+		new InputLosefocusFunction(browser, InputLosefocusFunction.FUNCTION_NAME);
 
 		final String script1 = ScriptManager.loadScript(ScriptManager.force_open_link_in_self);
 		browser.addProgressListener(new ProgressListener() {
@@ -150,7 +155,7 @@ public class BrowserView extends ViewPart {
 			}
 		});
 
-		Toolbar toolbar = new Toolbar();
+		Toolbar toolbar = Toolbar.getToolbar();
 		toolbar.setVisible(true);
 	}
 

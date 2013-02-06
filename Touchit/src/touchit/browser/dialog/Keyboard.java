@@ -31,6 +31,11 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class Keyboard extends JFrame {
+	private static Keyboard keyboard = new Keyboard();
+	
+	public static Keyboard getKeyboard(){
+		return keyboard;
+	}
 
 	/**
 	 * 
@@ -56,7 +61,7 @@ public class Keyboard extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Keyboard() {
+	private Keyboard() {
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 		// setDefaultLookAndFeelDecorated(false);
 

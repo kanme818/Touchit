@@ -18,12 +18,18 @@ import touchit.browser.manager.RuntimeManager;
 import touchit.browser.manager.SettingsManager;
 
 public class Toolbar extends JFrame {
-	private Keyboard keyboard = new Keyboard();
+	private static Toolbar toolbar = new Toolbar();
 
-	private static final String TXT_OPEN_KEYBOARD = "使用虚拟键盘";
-	private static final String TXT_CLOSE_KEYBOARD = "关闭虚拟键盘";
-	private static final String TXT_OPEN_TOUCHPAD = "使用手写板";
-	private static final String TXT_CLOSE_TOUCHPAD = "使用手写板";
+	public static Toolbar getToolbar() {
+		return toolbar;
+	};
+
+	private Keyboard keyboard = Keyboard.getKeyboard();
+
+	public static final String TXT_OPEN_KEYBOARD = "使用虚拟键盘";
+	public static final String TXT_CLOSE_KEYBOARD = "关闭虚拟键盘";
+	public static final String TXT_OPEN_TOUCHPAD = "使用手写板";
+	public static final String TXT_CLOSE_TOUCHPAD = "使用手写板";
 
 	private JButton btnKeyboard;
 	private JButton btnTouchPad;
@@ -54,7 +60,7 @@ public class Toolbar extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Toolbar() {
+	private Toolbar() {
 		java.awt.Rectangle frameSize = new java.awt.Rectangle(0, 0, 300, 50);
 		setBounds(frameSize);
 		setUndecorated(true);
@@ -172,4 +178,14 @@ public class Toolbar extends JFrame {
 		RuntimeManager.killProcess(RuntimeManager.PROCESS_HANDINPUT);
 		btnTouchPad.setText(TXT_OPEN_TOUCHPAD);
 	}
+
+	public JButton getBtnKeyboard() {
+		return btnKeyboard;
+	}
+
+	public void setBtnKeyboard(JButton btnKeyboard) {
+		this.btnKeyboard = btnKeyboard;
+	}
+	
+	
 }
